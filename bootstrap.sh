@@ -24,6 +24,13 @@ fi
 echo "Installing Python $PYTHON_VERSION..."
 
 brew install pyenv
+pyenv init 
+
+PYENV_INIT="$(pyenv init -)"
+ZSHRC_PATH=$HOME/.zshrc
+
+grep -qxFs "$PYENV_INIT" $ZSHRC_PATH || echo "$PYENV_INIT" >> $ZSHRC_PATH
+
 pyenv install $PYTHON_VERSION
 pyenv versions
 pyenv global $PYTHON_VERSION
