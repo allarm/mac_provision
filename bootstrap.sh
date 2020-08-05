@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 PYTHON_VERSION="3.8.2"
 VENV_DIR=".virtualenvs"
@@ -16,7 +16,7 @@ fi
 if ! command -v brew &> /dev/null
 then
     echo "Installing homebrew..."
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 else
     echo "Homebrew is installed."
 fi
