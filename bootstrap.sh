@@ -13,13 +13,12 @@ else
     echo "XCode CLT is installed."
 fi
 
-if ! command -v brew &> /dev/null
-then
+if test ! $(which brew); then
     echo "Installing homebrew..."
-    $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)
-else
-    echo "Homebrew is installed."
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
+
+brew update
 
 echo "Installing Python $PYTHON_VERSION..."
 
