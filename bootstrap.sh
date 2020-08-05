@@ -31,6 +31,8 @@ ZSHRC_PATH=$HOME/.zshrc
 
 grep -qxFs "$PYENV_INIT" $ZSHRC_PATH || echo "$PYENV_INIT" >> $ZSHRC_PATH
 
+source $HOME/.zshrc
+
 pyenv install $PYTHON_VERSION
 pyenv versions
 pyenv global $PYTHON_VERSION
@@ -39,7 +41,9 @@ cd $HOME
 mkdir -p $VENV_DIR
 cd $VENV_DIR
 
-python -m venv $VENV_NAME
+python3 -m venv $VENV_NAME
 source $VENV_NAME/bin/activate
 
 pip install ansible
+
+echo "Bootstraping done. Continue with Ansible..."
