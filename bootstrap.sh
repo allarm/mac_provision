@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/usr/bin/env bash
 
 PYTHON_VERSION="3.8.2"
 VENV_DIR=".virtualenvs"
