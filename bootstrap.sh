@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 PYTHON_VERSION="3.8.2"
 VENV_DIR=".virtualenvs"
@@ -8,6 +8,7 @@ if ! command -v xcode-select -p &> /dev/null
 then
     echo "XCode CLT is not installed. Installing..."
     xcode-select --install
+    echo "Exiting for now, restart the script when installation is finished."
 else
     echo "XCode CLT is installed."
 fi
