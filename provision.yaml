@@ -121,6 +121,7 @@
       tags:
         - omf
       shell: curl -L https://get.oh-my.fish | fish
+      command_warnings=False
       when: is_omf_exist.failed
 
     - name: Check if line exists
