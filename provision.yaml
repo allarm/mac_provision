@@ -89,17 +89,66 @@
       when: homebrew_check.stat.exists
       register: result
 
-      - name: Check is omf installed
-        shell: command -v omf >/dev/null 2>&1
-        register: is_omf_exist
-        ignore_errors: yes
+    - name: Check is omf installed
+      tags:
+        - omf
+      shell: command -v omf >/dev/null 2>&1
+      register: is_omf_exist
+      ignore_errors: yes
 
-      - debug: msg="{{ is_omf_exist.rc }}" # it returns rc 1
-      - debug: var=is_omf_exist
+    - debug: msg="{{ is_omf_exist.rc }}" # it returns rc 1
+    - debug: var=is_omf_exist
 
-      - name: Install OhMyFish
-        shell: curl -L https://get.oh-my.fish | fish
-        when: not is_omf_exist.stat.exists
+    - name: Install OhMyFish
+      tags:
+        - omf
+      shell: curl -L https://get.oh-my.fish | fish
+      when: is_omf_exist.failed
+
+    - name: Check if line exists
+      tags:
+        - omf
+        - debug 
+      become: yes
+      shell: grep -c "fish" /etc/shells
+      register: result
+      ignore_errors: yes
+
+    - name: Debug
+      tags:
+        - omf
+        - debug
+      debug: var=result
+
+    - name: Add Fish as default shell
+      tags:
+        - fish
+        - debug
+      become: yes
+      lineinfile:
+        dest: /etc/shells
+        line: /usr/local/bin/fish
+      when: result.stdout == "0"
+
+    - name: Checking the current shell
+      tags:
+        - fish
+        - debug
+      shell: echo $SHELL | grep "fish"
+      register: result
+      ignore_errors: yes
+
+    - name: Debug
+      tags:
+        - debug
+      debug: var=result
+
+    - name: Changing shell to Fish
+      tags:
+        - fish
+        - debug
+      shell: chsh -s /usr/local/bin/fish
+      when: result.stdout == "0"
 
     # - name: Installing Python Modules
     #   pip:
