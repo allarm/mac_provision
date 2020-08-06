@@ -5,7 +5,7 @@
   vars:
     brew_cask_packages:
       - dropbox
-#      - firefox
+      - firefox
       - iterm2
       - 1password
       - macvim
@@ -28,6 +28,8 @@
       # - pyenv
       # - python
       - ssh-copy-id
+      - fish
+
       - tmux
       - tree
       - wget
@@ -86,6 +88,18 @@
 #      until: result is successful
       when: homebrew_check.stat.exists
       register: result
+
+      - name: Check is omf installed
+        shell: command -v omf >/dev/null 2>&1
+        register: is_omf_exist
+        ignore_errors: yes
+
+      - debug: msg="{{ is_omf_exist.rc }}" # it returns rc 1
+      - debug: var=is_omf_exist
+
+      - name: Install OhMyFish
+        shell: curl -L https://get.oh-my.fish | fish
+        when: not is_omf_exist.stat.exists
 
     # - name: Installing Python Modules
     #   pip:
