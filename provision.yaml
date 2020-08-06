@@ -3,6 +3,8 @@
   hosts: localhost
   become: false
   vars:
+    brew_taps:
+      - homebrew/cask-fonts
     brew_cask_packages:
       - dropbox
       - firefox
@@ -17,6 +19,8 @@
       - maccy
       - telegram
       - karabiner-elements
+      - font-iosevka
+      - font-iosevka-slab
       # - vmware-fusion
     brew_packages:
       - git
@@ -60,12 +64,22 @@
         - install_homebrew_if_missing
 
   tasks:
+    - name: Tap repos
+      tags:
+        - brew
+      homebrew_tap:
+        name: "{{ brew_taps }}"
+
     - name: Updating Homebrew
+      tags:
+        - brew
       homebrew:
         update_homebrew: true
       when: homebrew_check.stat.exists
 
     - name: Upgrading Homebrew Packages
+      tags:
+        - brew
       homebrew:
         upgrade_all: "{{ upgrade_homebrew_packages }}"
       register: result
@@ -73,6 +87,8 @@
       when: homebrew_check.stat.exists
 
     - name: Installing Homebrew Cask Packages
+      tags:
+        - brew
       homebrew_cask:
         name: "{{ brew_cask_packages }}"
         state: present
@@ -82,6 +98,8 @@
       register: result
 
     - name: Installing Homebrew Packages
+      tags:
+        - brew
       homebrew:
         name: "{{ brew_packages }}"
         state: present
@@ -96,7 +114,7 @@
       register: is_omf_exist
       ignore_errors: yes
 
-    - debug: msg="{{ is_omf_exist.rc }}" # it returns rc 1
+    - debug: msg="{{ is_omf_exist.rc }}" 
     - debug: var=is_omf_exist
 
     - name: Install OhMyFish
