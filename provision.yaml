@@ -5,7 +5,7 @@
   vars:
     brew_cask_packages:
       - dropbox
-      - firefox
+#      - firefox
       - iterm2
       - 1password
       - macvim
@@ -15,6 +15,8 @@
       - virtualbox-extension-pack
       - caffeine
       - maccy
+      - telegram
+      - karabiner-elements
       # - vmware-fusion
     brew_packages:
       - git
@@ -65,24 +67,26 @@
       homebrew:
         upgrade_all: "{{ upgrade_homebrew_packages }}"
       register: result
-      until: result is successful
+#      until: result is successful
       when: homebrew_check.stat.exists
 
     - name: Installing Homebrew Cask Packages
       homebrew_cask:
         name: "{{ brew_cask_packages }}"
         state: present
-      register: result
-      until: result is successful
+        accept_external_apps: True
+#      until: result is successful
       when: homebrew_check.stat.exists
+      register: result
 
     - name: Installing Homebrew Packages
       homebrew:
         name: "{{ brew_packages }}"
         state: present
-      register: result
-      until: result is successful
+#      until: result is successful
       when: homebrew_check.stat.exists
+      register: result
+
     # - name: Installing Python Modules
     #   pip:
     #     name: "{{ item }}"
